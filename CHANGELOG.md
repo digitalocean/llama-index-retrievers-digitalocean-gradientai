@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.1] - 2026-01-27
+
+### Fixed
+
+- Fixed `TextNode` id_ crash when `chunk_id` is `None`
+- Updated docs and tests to use `DIGITALOCEAN_ACCESS_TOKEN` instead of `MODEL_ACCESS_KEY`
+- Updated LLM example to use `llama3.3-70b-instruct` with correct `model_access_key` param
+
+### Added
+
+- `CONTRIBUTING.md`
+- `CHANGELOG.md`
+- GitHub Actions CI workflow (Python 3.8-3.12)
+- Tests for custom `base_url`/`timeout` and `None` metadata values
+
 ## [0.1.0] - 2025-01-01
 
 ### Added
