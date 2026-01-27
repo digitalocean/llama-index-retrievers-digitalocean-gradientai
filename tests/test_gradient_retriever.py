@@ -139,11 +139,83 @@ class TestGradientKBRetriever:
             assert node.node.text == f"Content {i}"
             assert node.score == 0.9 - (i * 0.1)
 
+    def test_init_custom_base_url_and_timeout(self):
+        """Test initialization with custom base_url and timeout."""
+        retriever = GradientKBRetriever(
+            knowledge_base_id="kb-test-123",
+            api_token="test-token",
+            base_url="https://custom.api.example.com",
+            timeout=120.0,
+        )
+
+        assert retriever._base_url == "https://custom.api.example.com"
+        assert retriever._timeout == 120.0
+
+    @patch("llama_index.retrievers.digitalocean.gradient.base.Gradient")
+    def test_client_passes_base_url_and_timeout(self, mock_gradient_class):
+        """Test that custom base_url and timeout are passed to the Gradient client."""
+        mock_client = MagicMock()
+        mock_gradient_class.return_value = mock_client
+
+        retriever = GradientKBRetriever(
+            knowledge_base_id="kb-test",
+            api_token="test-token",
+            base_url="https://custom.example.com",
+            timeout=90.0,
+        )
+
+        # Access the client property to trigger creation
+        _ = retriever._client
+
+        mock_gradient_class.assert_called_once_with(
+            model_access_key="test-token",
+            base_url="https://custom.example.com",
+            timeout=90.0,
+        )
+
+    @patch("llama_index.retrievers.digitalocean.gradient.base.Gradient")
+    def test_retrieve_none_metadata_values(self, mock_gradient_class):
+        """Test retrieval when metadata fields are None."""
+        mock_result = MagicMock()
+        mock_result.text_content = "Content with None metadata"
+        mock_result.score = 0.8
+        mock_result.document_id = None
+        mock_result.chunk_id = None
+        mock_result.source = None
+        mock_result.metadata = None
+
+        mock_response = MagicMock()
+        mock_response.results = [mock_result]
+
+        mock_client = MagicMock()
+        mock_client.retrieve.documents.return_value = mock_response
+        mock_gradient_class.return_value = mock_client
+
+        retriever = GradientKBRetriever(
+            knowledge_base_id="kb-test",
+            api_token="test-token",
+        )
+
+        query_bundle = QueryBundle(query_str="test")
+        nodes = retriever.retrieve(query_bundle)
+
+        assert len(nodes) == 1
+        assert nodes[0].node.text == "Content with None metadata"
+        assert nodes[0].score == 0.8
+        # None values should still be stored in metadata
+        assert nodes[0].node.metadata["document_id"] is None
+        assert nodes[0].node.metadata["chunk_id"] is None
+        assert nodes[0].node.metadata["source"] is None
+
     @patch("llama_index.retrievers.digitalocean.gradient.base.Gradient")
     def test_retrieve_missing_score(self, mock_gradient_class):
         """Test retrieval when score is missing."""
         mock_result = MagicMock()
         mock_result.text_content = "Some content"
+        mock_result.document_id = "doc-no-score"
+        mock_result.chunk_id = "chunk-no-score"
+        mock_result.source = "test.pdf"
+        mock_result.metadata = None
         # No score attribute
         delattr(mock_result, "score")
 

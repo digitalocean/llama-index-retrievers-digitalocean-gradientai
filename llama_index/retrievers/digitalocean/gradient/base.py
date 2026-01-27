@@ -145,7 +145,7 @@ class GradientKBRetriever(BaseRetriever):
             node = TextNode(
                 text=text_content,
                 metadata=metadata,
-                id_=metadata.get("chunk_id", f"gradient_kb_{idx}"),
+                id_=str(metadata.get("chunk_id") or f"gradient_kb_{idx}"),
             )
 
             # Create NodeWithScore
