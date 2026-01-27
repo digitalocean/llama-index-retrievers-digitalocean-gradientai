@@ -241,7 +241,7 @@ class TestGradientKBRetriever:
 
 @pytest.mark.integration
 @pytest.mark.skipif(
-    not os.getenv("MODEL_ACCESS_KEY"), reason="MODEL_ACCESS_KEY not set"
+    not os.getenv("DIGITALOCEAN_ACCESS_TOKEN"), reason="DIGITALOCEAN_ACCESS_TOKEN not set"
 )
 class TestGradientKBRetrieverIntegration:
     """Integration tests requiring actual Gradient API access."""
@@ -255,7 +255,7 @@ class TestGradientKBRetrieverIntegration:
 
         retriever = GradientKBRetriever(
             knowledge_base_id=kb_id,
-            api_token=os.getenv("MODEL_ACCESS_KEY"),
+            api_token=os.getenv("DIGITALOCEAN_ACCESS_TOKEN"),
             num_results=3,
         )
 
@@ -276,7 +276,7 @@ class TestGradientKBRetrieverIntegration:
 
         retriever = GradientKBRetriever(
             knowledge_base_id=kb_id,
-            api_token=os.getenv("MODEL_ACCESS_KEY"),
+            api_token=os.getenv("DIGITALOCEAN_ACCESS_TOKEN"),
             num_results=3,
         )
 

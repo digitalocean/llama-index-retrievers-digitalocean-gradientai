@@ -35,7 +35,7 @@ pytest tests/test_gradient_retriever.py::TestGradientKBRetriever::test_retrieve_
 pytest -v --no-cov
 ```
 
-**Important**: Integration tests require `MODEL_ACCESS_KEY` and `GRADIENT_KB_ID` environment variables. Tests are skipped automatically if credentials are not found.
+**Important**: Integration tests require `DIGITALOCEAN_ACCESS_TOKEN` and `GRADIENT_KB_ID` environment variables. Tests are skipped automatically if credentials are not found.
 
 ### Linting and Formatting
 ```bash
@@ -129,7 +129,7 @@ The retriever can be used in multiple ways:
 ## Testing Strategy
 
 - **Unit Tests**: Mock Gradient SDK responses to test conversion logic
-- **Integration Tests**: Require real Gradient API credentials (`MODEL_ACCESS_KEY`, `GRADIENT_KB_ID`)
+- **Integration Tests**: Require real Gradient API credentials (`DIGITALOCEAN_ACCESS_TOKEN`, `GRADIENT_KB_ID`)
 - **Coverage**: Target high coverage of conversion and error handling logic
 
 ## Related Packages

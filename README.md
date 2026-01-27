@@ -29,7 +29,7 @@ from llama_index.retrievers.digitalocean.gradient import GradientKBRetriever
 # Initialize retriever
 retriever = GradientKBRetriever(
     knowledge_base_id="kb-your-uuid-here",
-    api_token="your-digitalocean-api-token",
+    api_token="your-digitalocean-access-token",  # DIGITALOCEAN_ACCESS_TOKEN
     num_results=5
 )
 
@@ -53,14 +53,14 @@ from llama_index.llms.digitalocean.gradientai import GradientAI
 # Initialize retriever
 retriever = GradientKBRetriever(
     knowledge_base_id="kb-your-uuid-here",
-    api_token="your-api-token",
+    api_token="your-digitalocean-access-token",  # DIGITALOCEAN_ACCESS_TOKEN
     num_results=5
 )
 
 # Initialize LLM (optional - for response generation)
 llm = GradientAI(
-    model="openai-gpt-oss-120b",
-    model_access_key="your-api-token"
+    model="llama3.3-70b-instruct",
+    model_access_key="your-model-access-key"  # MODEL_ACCESS_KEY
 )
 
 # Create query engine
@@ -83,7 +83,7 @@ from llama_index.core import QueryBundle
 async def async_retrieve():
     retriever = GradientKBRetriever(
         knowledge_base_id="kb-your-uuid-here",
-        api_token="your-api-token"
+        api_token="your-digitalocean-access-token"  # DIGITALOCEAN_ACCESS_TOKEN
     )
 
     query = QueryBundle(query_str="What is neural networks?")
@@ -99,7 +99,7 @@ nodes = asyncio.run(async_retrieve())
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
 | `knowledge_base_id` | `str` | *Required* | Gradient Knowledge Base UUID |
-| `api_token` | `str` | *Required* | DigitalOcean API token |
+| `api_token` | `str` | *Required* | DigitalOcean access token (`DIGITALOCEAN_ACCESS_TOKEN`) |
 | `num_results` | `int` | `5` | Number of results to retrieve |
 | `base_url` | `str` | `None` | Custom API base URL (optional) |
 | `timeout` | `float` | `60.0` | Request timeout in seconds |
