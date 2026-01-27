@@ -43,36 +43,50 @@ for node in nodes:
     print(f"Metadata: {node.node.metadata}")
 ```
 
-### Integration with Query Engine
+### End-to-End RAG with Gradient LLM
+
+Build a complete RAG pipeline using both the retriever and LLM packages from DigitalOcean Gradient.
+
+**Install both packages:**
+
+```bash
+pip install llama-index-retrievers-digitalocean-gradientai llama-index-llms-digitalocean-gradientai
+```
+
+**Full example:**
 
 ```python
 from llama_index.retrievers.digitalocean.gradientai import GradientKBRetriever
-from llama_index.core.query_engine import RetrieverQueryEngine
 from llama_index.llms.digitalocean.gradientai import GradientAI
+from llama_index.core.query_engine import RetrieverQueryEngine
 
-# Initialize retriever
+# Initialize retriever (uses DIGITALOCEAN_ACCESS_TOKEN)
 retriever = GradientKBRetriever(
     knowledge_base_id="kb-your-uuid-here",
-    api_token="your-digitalocean-access-token",  # DIGITALOCEAN_ACCESS_TOKEN
+    api_token="your-digitalocean-access-token",
     num_results=5
 )
 
-# Initialize LLM (optional - for response generation)
+# Initialize LLM (uses MODEL_ACCESS_KEY)
 llm = GradientAI(
     model="llama3.3-70b-instruct",
-    model_access_key="your-model-access-key"  # MODEL_ACCESS_KEY
+    model_access_key="your-model-access-key"
 )
 
-# Create query engine
+# Create query engine - retrieves relevant docs and generates a response
 query_engine = RetrieverQueryEngine.from_args(
     retriever=retriever,
     llm=llm
 )
 
-# Query with automatic retrieval + response generation
+# Query: retriever fetches context from KB, LLM generates the answer
 response = query_engine.query("Explain quantum computing")
 print(response)
 ```
+
+This gives you a full RAG pipeline where:
+1. The **retriever** searches your Gradient Knowledge Base for relevant documents
+2. The **LLM** uses those documents as context to generate a grounded response
 
 ### Async Usage
 
