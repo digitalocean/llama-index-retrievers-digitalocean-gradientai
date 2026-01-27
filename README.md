@@ -1,6 +1,6 @@
 # LlamaIndex Retrievers Integration: DigitalOcean Gradient
 
-[![PyPI version](https://badge.fury.io/py/llama-index-retrievers-digitalocean-gradient.svg)](https://badge.fury.io/py/llama-index-retrievers-digitalocean-gradient)
+[![PyPI version](https://badge.fury.io/py/llama-index-retrievers-digitalocean-gradientai.svg)](https://badge.fury.io/py/llama-index-retrievers-digitalocean-gradientai)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Native LlamaIndex retriever integration for **DigitalOcean Gradient Knowledge Base as a Service (KBAas)**. This package provides seamless integration between Gradient's knowledge base retrieval and the LlamaIndex ecosystem.
@@ -16,7 +16,7 @@ Native LlamaIndex retriever integration for **DigitalOcean Gradient Knowledge Ba
 ## Installation
 
 ```bash
-pip install llama-index-retrievers-digitalocean-gradient
+pip install llama-index-retrievers-digitalocean-gradientai
 ```
 
 ## Quick Start
@@ -24,7 +24,7 @@ pip install llama-index-retrievers-digitalocean-gradient
 ### Basic Usage
 
 ```python
-from llama_index.retrievers.digitalocean.gradient import GradientKBRetriever
+from llama_index.retrievers.digitalocean.gradientai import GradientKBRetriever
 
 # Initialize retriever
 retriever = GradientKBRetriever(
@@ -46,7 +46,7 @@ for node in nodes:
 ### Integration with Query Engine
 
 ```python
-from llama_index.retrievers.digitalocean.gradient import GradientKBRetriever
+from llama_index.retrievers.digitalocean.gradientai import GradientKBRetriever
 from llama_index.core.query_engine import RetrieverQueryEngine
 from llama_index.llms.digitalocean.gradientai import GradientAI
 
@@ -200,8 +200,8 @@ nodes = retriever.retrieve("query")
 
 ```bash
 # Clone repository
-git clone https://github.com/digitalocean/llama-index-retrievers-digitalocean-gradient
-cd llama-index-retrievers-digitalocean-gradient
+git clone https://github.com/digitalocean/llama-index-retrievers-digitalocean-gradientai
+cd llama-index-retrievers-digitalocean-gradientai
 
 # Install in development mode
 pip install -e ".[dev]"
@@ -224,8 +224,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Support
 
-- **Issues**: [GitHub Issues](https://github.com/digitalocean/llama-index-retrievers-digitalocean-gradient/issues)
-- **Documentation**: [README](https://github.com/digitalocean/llama-index-retrievers-digitalocean-gradient#readme)
+- **Issues**: [GitHub Issues](https://github.com/digitalocean/llama-index-retrievers-digitalocean-gradientai/issues)
+- **Documentation**: [README](https://github.com/digitalocean/llama-index-retrievers-digitalocean-gradientai#readme)
 
 ## Acknowledgments
 

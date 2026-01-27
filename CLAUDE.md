@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This is a LlamaIndex retriever integration package for DigitalOcean Gradient Knowledge Base as a Service (KBAas). The package wraps the official `gradient` SDK and implements the LlamaIndex `BaseRetriever` interface.
 
-**Package name**: `llama-index-retrievers-digitalocean-gradient`
+**Package name**: `llama-index-retrievers-digitalocean-gradientai`
 **Main class**: `GradientKBRetriever` (extends `BaseRetriever` from LlamaIndex)
 
 ## Development Commands
@@ -68,14 +68,14 @@ python -m twine upload dist/*
 
 ### Package Structure
 ```
-llama_index/retrievers/digitalocean/gradient/
+llama_index/retrievers/digitalocean/gradientai/
 ├── __init__.py     # Exports GradientKBRetriever
 └── base.py         # Main GradientKBRetriever implementation
 ```
 
 ### GradientKBRetriever Class (base.py)
 
-The `GradientKBRetriever` class in `llama_index/retrievers/digitalocean/gradient/base.py` is the core implementation. Key architectural points:
+The `GradientKBRetriever` class in `llama_index/retrievers/digitalocean/gradientai/base.py` is the core implementation. Key architectural points:
 
 **Inheritance**: Extends `BaseRetriever` from LlamaIndex core, which provides the interface for retrievers.
 

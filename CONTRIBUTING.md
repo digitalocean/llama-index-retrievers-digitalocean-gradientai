@@ -1,4 +1,4 @@
-# Contributing to llama-index-retrievers-digitalocean-gradient
+# Contributing to llama-index-retrievers-digitalocean-gradientai
 
 Thank you for your interest in contributing! This document provides guidelines for contributing to this project.
 
@@ -7,8 +7,8 @@ Thank you for your interest in contributing! This document provides guidelines f
 1. Fork the repository
 2. Clone your fork:
    ```bash
-   git clone https://github.com/<your-username>/llama-index-retrievers-digitalocean-gradient.git
-   cd llama-index-retrievers-digitalocean-gradient
+   git clone https://github.com/<your-username>/llama-index-retrievers-digitalocean-gradientai.git
+   cd llama-index-retrievers-digitalocean-gradientai
    ```
 3. Install in development mode:
    ```bash
@@ -23,7 +23,7 @@ Thank you for your interest in contributing! This document provides guidelines f
 pytest
 ```
 
-Integration tests require `MODEL_ACCESS_KEY` and `GRADIENT_KB_ID` environment variables and are skipped automatically if not set.
+Integration tests require `DIGITALOCEAN_ACCESS_TOKEN` and `GRADIENT_KB_ID` environment variables and are skipped automatically if not set.
 
 ### Code Style
 
@@ -35,7 +35,7 @@ This project uses:
 ```bash
 black .
 ruff check . --fix
-mypy llama_index/retrievers/digitalocean/gradient
+mypy llama_index/retrievers/digitalocean/gradientai
 ```
 
 ### Submitting Changes
@@ -49,7 +49,7 @@ mypy llama_index/retrievers/digitalocean/gradient
 
 ## Reporting Issues
 
-Open an issue on [GitHub Issues](https://github.com/digitalocean/llama-index-retrievers-digitalocean-gradient/issues) with:
+Open an issue on [GitHub Issues](https://github.com/digitalocean/llama-index-retrievers-digitalocean-gradientai/issues) with:
 - A clear description of the problem
 - Steps to reproduce
 - Expected vs actual behavior

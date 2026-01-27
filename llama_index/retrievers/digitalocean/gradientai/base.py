@@ -21,7 +21,7 @@ class GradientKBRetriever(BaseRetriever):
     integration with query engines, retrievers, and other LlamaIndex components.
 
     Example:
-        >>> from llama_index.retrievers.digitalocean.gradient import GradientKBRetriever
+        >>> from llama_index.retrievers.digitalocean.gradientai import GradientKBRetriever
         >>> from llama_index.core.query_engine import RetrieverQueryEngine
         >>>
         >>> retriever = GradientKBRetriever(

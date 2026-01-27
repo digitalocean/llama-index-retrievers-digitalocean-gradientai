@@ -31,7 +31,7 @@ jobs:
         run: black --check .
 
       - name: Type check with mypy
-        run: mypy llama_index/retrievers/digitalocean/gradient
+        run: mypy llama_index/retrievers/digitalocean/gradientai
 
       - name: Run tests
         run: pytest --no-cov -v

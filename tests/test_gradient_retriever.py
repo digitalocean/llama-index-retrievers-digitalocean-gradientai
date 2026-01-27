@@ -7,7 +7,7 @@ import pytest
 from llama_index.core import QueryBundle
 from llama_index.core.schema import NodeWithScore, TextNode
 
-from llama_index.retrievers.digitalocean.gradient import GradientKBRetriever
+from llama_index.retrievers.digitalocean.gradientai import GradientKBRetriever
 
 
 class TestGradientKBRetriever:
@@ -37,7 +37,7 @@ class TestGradientKBRetriever:
         assert retriever._num_results == 10
         assert retriever._timeout == 30.0
 
-    @patch("llama_index.retrievers.digitalocean.gradient.base.Gradient")
+    @patch("llama_index.retrievers.digitalocean.gradientai.base.Gradient")
     def test_retrieve_basic(self, mock_gradient_class):
         """Test basic retrieval functionality."""
         # Mock response
@@ -85,7 +85,7 @@ class TestGradientKBRetriever:
         assert nodes[0].node.metadata["source"] == "ml_textbook.pdf"
         assert nodes[0].node.metadata["page"] == 42
 
-    @patch("llama_index.retrievers.digitalocean.gradient.base.Gradient")
+    @patch("llama_index.retrievers.digitalocean.gradientai.base.Gradient")
     def test_retrieve_empty_results(self, mock_gradient_class):
         """Test retrieval with empty results."""
         mock_response = MagicMock()
@@ -105,7 +105,7 @@ class TestGradientKBRetriever:
 
         assert len(nodes) == 0
 
-    @patch("llama_index.retrievers.digitalocean.gradient.base.Gradient")
+    @patch("llama_index.retrievers.digitalocean.gradientai.base.Gradient")
     def test_retrieve_multiple_results(self, mock_gradient_class):
         """Test retrieval with multiple results."""
         # Create multiple mock results
@@ -151,7 +151,7 @@ class TestGradientKBRetriever:
         assert retriever._base_url == "https://custom.api.example.com"
         assert retriever._timeout == 120.0
 
-    @patch("llama_index.retrievers.digitalocean.gradient.base.Gradient")
+    @patch("llama_index.retrievers.digitalocean.gradientai.base.Gradient")
     def test_client_passes_base_url_and_timeout(self, mock_gradient_class):
         """Test that custom base_url and timeout are passed to the Gradient client."""
         mock_client = MagicMock()
@@ -173,7 +173,7 @@ class TestGradientKBRetriever:
             timeout=90.0,
         )
 
-    @patch("llama_index.retrievers.digitalocean.gradient.base.Gradient")
+    @patch("llama_index.retrievers.digitalocean.gradientai.base.Gradient")
     def test_retrieve_none_metadata_values(self, mock_gradient_class):
         """Test retrieval when metadata fields are None."""
         mock_result = MagicMock()
@@ -207,7 +207,7 @@ class TestGradientKBRetriever:
         assert nodes[0].node.metadata["chunk_id"] is None
         assert nodes[0].node.metadata["source"] is None
 
-    @patch("llama_index.retrievers.digitalocean.gradient.base.Gradient")
+    @patch("llama_index.retrievers.digitalocean.gradientai.base.Gradient")
     def test_retrieve_missing_score(self, mock_gradient_class):
         """Test retrieval when score is missing."""
         mock_result = MagicMock()
