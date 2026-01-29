@@ -114,9 +114,50 @@ nodes = asyncio.run(async_retrieve())
 |-----------|------|---------|-------------|
 | `knowledge_base_id` | `str` | *Required* | Gradient Knowledge Base UUID |
 | `api_token` | `str` | *Required* | DigitalOcean access token (`DIGITALOCEAN_ACCESS_TOKEN`) |
-| `num_results` | `int` | `5` | Number of results to retrieve |
+| `num_results` | `int` | `5` | Number of results to retrieve (1-100) |
+| `alpha` | `float` | `None` | Hybrid search weight: 0=keyword/BM25, 1=semantic/vector |
+| `filters` | `dict` | `None` | Metadata filters (see below) |
 | `base_url` | `str` | `None` | Custom API base URL (optional) |
 | `timeout` | `float` | `60.0` | Request timeout in seconds |
+
+### Hybrid Search (alpha)
+
+Control the balance between keyword and semantic search:
+
+```python
+# Pure keyword/BM25 search (good for exact matches, technical terms)
+retriever = GradientKBRetriever(..., alpha=0.0)
+
+# Balanced hybrid search
+retriever = GradientKBRetriever(..., alpha=0.5)
+
+# Pure semantic/vector search (good for conceptual queries)
+retriever = GradientKBRetriever(..., alpha=1.0)
+```
+
+### Metadata Filtering
+
+Filter results based on document metadata:
+
+```python
+# Only retrieve from documents with source="docs"
+retriever = GradientKBRetriever(
+    ...,
+    filters={
+        "must": [{"key": "source", "operator": "eq", "value": "docs"}]
+    }
+)
+
+# Exclude certain document types
+retriever = GradientKBRetriever(
+    ...,
+    filters={
+        "must_not": [{"key": "type", "operator": "eq", "value": "draft"}]
+    }
+)
+```
+
+Supported filter operators: `eq`, `ne`, `gt`, `gte`, `lt`, `lte`, `in`, `not_in`, `contains`
 
 ## Why Use This Instead of Manual SDK Calls?
 

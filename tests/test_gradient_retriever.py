@@ -151,6 +151,72 @@ class TestGradientKBRetriever:
         assert retriever._base_url == "https://custom.api.example.com"
         assert retriever._timeout == 120.0
 
+    def test_init_with_alpha_and_filters(self):
+        """Test initialization with alpha and filters parameters."""
+        filters = {"must": [{"key": "source", "operator": "eq", "value": "docs"}]}
+        retriever = GradientKBRetriever(
+            knowledge_base_id="kb-test-123",
+            api_token="test-token",
+            alpha=0.7,
+            filters=filters,
+        )
+
+        assert retriever._alpha == 0.7
+        assert retriever._filters == filters
+
+    @patch("llama_index.retrievers.digitalocean.gradientai.base.Gradient")
+    def test_retrieve_with_alpha(self, mock_gradient_class):
+        """Test retrieval passes alpha parameter to API."""
+        mock_response = MagicMock()
+        mock_response.results = []
+
+        mock_client = MagicMock()
+        mock_client.retrieve.documents.return_value = mock_response
+        mock_gradient_class.return_value = mock_client
+
+        retriever = GradientKBRetriever(
+            knowledge_base_id="kb-test",
+            api_token="test-token",
+            alpha=0.3,
+        )
+
+        query_bundle = QueryBundle(query_str="test query")
+        retriever.retrieve(query_bundle)
+
+        mock_client.retrieve.documents.assert_called_once_with(
+            knowledge_base_id="kb-test",
+            num_results=5,
+            query="test query",
+            alpha=0.3,
+        )
+
+    @patch("llama_index.retrievers.digitalocean.gradientai.base.Gradient")
+    def test_retrieve_with_filters(self, mock_gradient_class):
+        """Test retrieval passes filters parameter to API."""
+        mock_response = MagicMock()
+        mock_response.results = []
+
+        mock_client = MagicMock()
+        mock_client.retrieve.documents.return_value = mock_response
+        mock_gradient_class.return_value = mock_client
+
+        filters = {"must": [{"key": "source", "operator": "eq", "value": "docs"}]}
+        retriever = GradientKBRetriever(
+            knowledge_base_id="kb-test",
+            api_token="test-token",
+            filters=filters,
+        )
+
+        query_bundle = QueryBundle(query_str="test query")
+        retriever.retrieve(query_bundle)
+
+        mock_client.retrieve.documents.assert_called_once_with(
+            knowledge_base_id="kb-test",
+            num_results=5,
+            query="test query",
+            filters=filters,
+        )
+
     @patch("llama_index.retrievers.digitalocean.gradientai.base.Gradient")
     def test_client_passes_base_url_and_timeout(self, mock_gradient_class):
         """Test that custom base_url and timeout are passed to the Gradient client."""

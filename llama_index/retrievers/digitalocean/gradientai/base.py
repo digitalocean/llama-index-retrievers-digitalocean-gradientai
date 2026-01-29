@@ -1,6 +1,6 @@
 """DigitalOcean Gradient Knowledge Base retriever implementation."""
 
-from typing import Any, List, Optional
+from typing import Any, Dict, List, Optional
 
 from llama_index.core.retrievers import BaseRetriever
 from llama_index.core.schema import NodeWithScore, QueryBundle, TextNode
@@ -20,14 +20,31 @@ class GradientKBRetriever(BaseRetriever):
     Automatically converts Gradient KB results to LlamaIndex NodeWithScore objects for seamless
     integration with query engines, retrievers, and other LlamaIndex components.
 
+    Supports hybrid search (keyword + semantic) via the alpha parameter and metadata filtering.
+
     Example:
         >>> from llama_index.retrievers.digitalocean.gradientai import GradientKBRetriever
         >>> from llama_index.core.query_engine import RetrieverQueryEngine
         >>>
+        >>> # Basic usage
         >>> retriever = GradientKBRetriever(
         ...     knowledge_base_id="kb-uuid",
         ...     api_token="your-gradient-api-key",
         ...     num_results=5
+        ... )
+        >>>
+        >>> # With hybrid search (0=keyword, 1=semantic, 0.5=balanced)
+        >>> retriever = GradientKBRetriever(
+        ...     knowledge_base_id="kb-uuid",
+        ...     api_token="your-gradient-api-key",
+        ...     alpha=0.7  # Favor semantic search
+        ... )
+        >>>
+        >>> # With metadata filtering
+        >>> retriever = GradientKBRetriever(
+        ...     knowledge_base_id="kb-uuid",
+        ...     api_token="your-gradient-api-key",
+        ...     filters={"must": [{"key": "source", "operator": "eq", "value": "docs"}]}
         ... )
         >>>
         >>> # Use directly
@@ -43,6 +60,8 @@ class GradientKBRetriever(BaseRetriever):
         knowledge_base_id: str,
         api_token: str,
         num_results: int = 5,
+        alpha: Optional[float] = None,
+        filters: Optional[Dict[str, Any]] = None,
         base_url: Optional[str] = None,
         timeout: float = 60.0,
         **kwargs: Any,
@@ -53,6 +72,12 @@ class GradientKBRetriever(BaseRetriever):
             knowledge_base_id: Gradient Knowledge Base UUID.
             api_token: DigitalOcean API token for authentication.
             num_results: Number of results to retrieve per query (default: 5).
+            alpha: Hybrid search weight between 0 and 1 (default: None, uses API default).
+                0 = keyword/BM25 search only, 1 = vector/semantic search only.
+                Values in between blend both approaches.
+            filters: Metadata filters for retrieval. Supports 'must', 'must_not', 'should'
+                conditions with operators: eq, ne, gt, gte, lt, lte, in, not_in, contains.
+                Example: {"must": [{"key": "source", "operator": "eq", "value": "docs"}]}
             base_url: Optional custom API base URL.
             timeout: Request timeout in seconds (default: 60.0).
             **kwargs: Additional arguments passed to BaseRetriever.
@@ -68,6 +93,8 @@ class GradientKBRetriever(BaseRetriever):
         self._knowledge_base_id = knowledge_base_id
         self._api_token = api_token
         self._num_results = num_results
+        self._alpha = alpha
+        self._filters = filters
         self._base_url = base_url
         self._timeout = timeout
 
@@ -166,12 +193,21 @@ class GradientKBRetriever(BaseRetriever):
         # Extract query string from bundle
         query_str = query_bundle.query_str
 
+        # Build API call kwargs
+        api_kwargs: Dict[str, Any] = {
+            "knowledge_base_id": self._knowledge_base_id,
+            "num_results": self._num_results,
+            "query": query_str,
+        }
+
+        # Add optional parameters if set
+        if self._alpha is not None:
+            api_kwargs["alpha"] = self._alpha
+        if self._filters is not None:
+            api_kwargs["filters"] = self._filters
+
         # Call Gradient KB retrieval API
-        response = self._client.retrieve.documents(
-            knowledge_base_id=self._knowledge_base_id,
-            num_results=self._num_results,
-            query=query_str,
-        )
+        response = self._client.retrieve.documents(**api_kwargs)
 
         # Convert to NodeWithScore objects
         return self._convert_to_nodes(response)
@@ -188,12 +224,21 @@ class GradientKBRetriever(BaseRetriever):
         # Extract query string from bundle
         query_str = query_bundle.query_str
 
+        # Build API call kwargs
+        api_kwargs: Dict[str, Any] = {
+            "knowledge_base_id": self._knowledge_base_id,
+            "num_results": self._num_results,
+            "query": query_str,
+        }
+
+        # Add optional parameters if set
+        if self._alpha is not None:
+            api_kwargs["alpha"] = self._alpha
+        if self._filters is not None:
+            api_kwargs["filters"] = self._filters
+
         # Call Gradient KB retrieval API asynchronously
-        response = await self._async_client.retrieve.documents(
-            knowledge_base_id=self._knowledge_base_id,
-            num_results=self._num_results,
-            query=query_str,
-        )
+        response = await self._async_client.retrieve.documents(**api_kwargs)
 
         # Convert to NodeWithScore objects
         return self._convert_to_nodes(response)

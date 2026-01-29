@@ -28,7 +28,7 @@ classifiers = [
 
 dependencies = [
     "llama-index-core>=0.10.0",
-    "gradient>=3.8.0",
+    "gradient>=3.9.0",
 ]
 
 [project.optional-dependencies]
